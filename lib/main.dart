@@ -1,6 +1,7 @@
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
+import 'package:tts/tts.dart';
 
 void main() {
   runApp(new MyApp());
@@ -23,6 +24,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomeStateState extends State<MyHomePage> {
+  speak() async {
+    Tts.speak('Hello World');
+  }
+
   String _toLanuage;
   String _fromLanuage;
   DropdownMenuItem dmi_selected;
@@ -83,8 +88,11 @@ class _MyHomeStateState extends State<MyHomePage> {
             });
           },
         ),
-//        floatingActionButton:
-//            IconButton(icon: Icon(Icons.volume_up), onPressed: () {}),
+        floatingActionButton: IconButton(
+            icon: Icon(Icons.volume_up),
+            onPressed: () {
+              speak();
+            }),
         body: ListView(
           children: <Widget>[
             Container(
