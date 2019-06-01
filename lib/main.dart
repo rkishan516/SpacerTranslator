@@ -27,11 +27,10 @@ class _MyHomeStateState extends State<MyHomePage> {
   String _fromLanuage;
   DropdownMenuItem dmi_selected;
   Map _map = {
-    'Chinese (Simplified)': 'zh_CN',
-    'Chinese (Traditional)': 'zh_TW',
+    'Hindi': 'hi',
     'Danish': 'da',
-    'Dutch': 'nl_NL',
-    'English': 'en_US',
+    'Dutch': 'nl',
+    'English': 'en',
     'Finnish': 'fi',
     'French': 'fr',
     'German': 'de',
@@ -84,8 +83,8 @@ class _MyHomeStateState extends State<MyHomePage> {
             });
           },
         ),
-        floatingActionButton:
-            IconButton(icon: Icon(Icons.volume_up), onPressed: () {}),
+//        floatingActionButton:
+//            IconButton(icon: Icon(Icons.volume_up), onPressed: () {}),
         body: ListView(
           children: <Widget>[
             Container(
@@ -102,9 +101,7 @@ class _MyHomeStateState extends State<MyHomePage> {
 
   _getPage(int page) {
     Locale myLocale = Localizations.localeOf(context);
-    String _homeLanuage = myLocale.toString();
-    // For debug perpuse
-    _homeLanuage = 'hi';
+    String _homeLanuage = myLocale.toString().substring(0, 2);
     final translator = GoogleTranslator();
     switch (page) {
       case 0:
@@ -131,9 +128,13 @@ class _MyHomeStateState extends State<MyHomePage> {
                     color: Colors.purple,
                     onPressed: () {
                       setState(() {
-                        translator
-                            .translate(_txt1.text, to: _homeLanuage)
-                            .then((s) => _ans1 = s);
+                        if (_txt1.text != null) {
+                          translator
+                              .translate(_txt1.text, to: _homeLanuage)
+                              .then((s) => _ans1 = s);
+                        } else {
+                          _ans1 = 'Please enter a Some Text';
+                        }
                       });
                     },
                     child: Text(
@@ -200,7 +201,14 @@ class _MyHomeStateState extends State<MyHomePage> {
                     color: Colors.purple,
                     onPressed: () {
                       setState(() {
-                        _ans2 = _txt2.text;
+                        if (_txt2.text != null) {
+                          translator
+                              .translate(_txt2.text,
+                                  from: _fromLanuage, to: _toLanuage)
+                              .then((s) => _ans2 = s);
+                        } else {
+                          _ans2 = 'Please enter a Some Text';
+                        }
                       });
                     },
                     child: Text(
@@ -239,7 +247,6 @@ class _MyHomeStateState extends State<MyHomePage> {
   }
 
   Widget _from() {
-    var _value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -251,14 +258,13 @@ class _MyHomeStateState extends State<MyHomePage> {
           items: _list,
           onChanged: (s) {
             setState(() {
-              _value = s;
+              _fromLanuage = s.toString();
+              print('.................');
+              print(_fromLanuage);
+              print('.................');
             });
-            _toLanuage = s.value.toString();
-            print('.................');
-            print(_toLanuage);
-            print('.................');
           },
-          value: _value,
+          value: _fromLanuage,
           hint: Text("Select Language"),
         )
       ],
@@ -266,7 +272,6 @@ class _MyHomeStateState extends State<MyHomePage> {
   }
 
   Widget _to() {
-    var _value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -278,14 +283,13 @@ class _MyHomeStateState extends State<MyHomePage> {
           items: _list,
           onChanged: (s) {
             setState(() {
-              _value = s;
+              _toLanuage = s.toString();
+              print('.................');
+              print(_toLanuage);
+              print('.................');
             });
-            _toLanuage = s.value.toString();
-            print('.................');
-            print(_toLanuage);
-            print('.................');
           },
-          value: _value,
+          value: _toLanuage,
           hint: Text("Select Language"),
         )
       ],
