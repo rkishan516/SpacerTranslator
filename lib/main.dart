@@ -23,6 +23,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomeStateState extends State<MyHomePage> {
+  String _toLanuage;
+  String _fromLanuage;
+  DropdownMenuItem dmi_selected;
   Map _map = {
     'Chinese (Simplified)': 'zh_CN',
     'Chinese (Traditional)': 'zh_TW',
@@ -42,7 +45,7 @@ class _MyHomeStateState extends State<MyHomePage> {
   int currentPage = 0;
   String _ans1 = "";
   String _ans2 = "";
-  List _list = List();
+  List<DropdownMenuItem> _list = List<DropdownMenuItem>();
 
   @override
   void initState() {
@@ -72,8 +75,8 @@ class _MyHomeStateState extends State<MyHomePage> {
         ),
         bottomNavigationBar: FancyBottomNavigation(
           tabs: [
-            TabData(iconData: Icons.local_activity, title: "Home"),
-            TabData(iconData: Icons.shopping_cart, title: "Basket")
+            TabData(iconData: Icons.translate, title: "Home"),
+            TabData(iconData: Icons.g_translate, title: "Basket")
           ],
           onTabChangedListener: (position) {
             setState(() {
@@ -83,18 +86,25 @@ class _MyHomeStateState extends State<MyHomePage> {
         ),
         floatingActionButton:
             IconButton(icon: Icon(Icons.volume_up), onPressed: () {}),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.white),
-          child: Center(
-            child: _getPage(currentPage),
-          ),
+        body: ListView(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(color: Colors.white),
+              child: Center(
+                child: _getPage(currentPage),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   _getPage(int page) {
-    String _homeLanuage = 'hi';
+    Locale myLocale = Localizations.localeOf(context);
+    String _homeLanuage = myLocale.toString();
+    // For debug perpuse
+    _homeLanuage = 'hi';
     final translator = GoogleTranslator();
     switch (page) {
       case 0:
@@ -228,11 +238,8 @@ class _MyHomeStateState extends State<MyHomePage> {
     }
   }
 
-  List _items = List();
-
-  getItems() {}
-
   Widget _from() {
+    var _value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -240,11 +247,26 @@ class _MyHomeStateState extends State<MyHomePage> {
           padding: const EdgeInsets.all(8.0),
           child: Text("From :"),
         ),
+        DropdownButton(
+          items: _list,
+          onChanged: (s) {
+            setState(() {
+              _value = s;
+            });
+            _toLanuage = s.value.toString();
+            print('.................');
+            print(_toLanuage);
+            print('.................');
+          },
+          value: _value,
+          hint: Text("Select Language"),
+        )
       ],
     );
   }
 
   Widget _to() {
+    var _value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -253,21 +275,17 @@ class _MyHomeStateState extends State<MyHomePage> {
           child: Text("To :"),
         ),
         DropdownButton(
-          items: [
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-          ],
-          onChanged: null,
+          items: _list,
+          onChanged: (s) {
+            setState(() {
+              _value = s;
+            });
+            _toLanuage = s.value.toString();
+            print('.................');
+            print(_toLanuage);
+            print('.................');
+          },
+          value: _value,
           hint: Text("Select Language"),
         )
       ],
