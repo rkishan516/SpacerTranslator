@@ -23,14 +23,11 @@ class MyHomePage extends StatefulWidget {
   _MyHomeStateState createState() => _MyHomeStateState();
 }
 
-class _MyHomeStateState extends State<MyHomePage> {
-  speak() async {
-    Tts.speak('Hello World');
-  }
+enum TtsState { playing, stopped }
 
+class _MyHomeStateState extends State<MyHomePage> {
   String _toLanuage;
   String _fromLanuage;
-  DropdownMenuItem dmi_selected;
   Map _map = {
     'Hindi': 'hi',
     'Danish': 'da',
@@ -53,6 +50,7 @@ class _MyHomeStateState extends State<MyHomePage> {
 
   @override
   void initState() {
+    super.initState();
     _map.forEach((dynamic key, dynamic value) {
       _list.add(_getDropDown(key, value));
     });
@@ -91,7 +89,10 @@ class _MyHomeStateState extends State<MyHomePage> {
         floatingActionButton: IconButton(
             icon: Icon(Icons.volume_up),
             onPressed: () {
-              speak();
+              setState(() {
+                Tts.setLanguage('en');
+                Tts.speak('Hello World');
+              });
             }),
         body: ListView(
           children: <Widget>[
@@ -267,9 +268,6 @@ class _MyHomeStateState extends State<MyHomePage> {
           onChanged: (s) {
             setState(() {
               _fromLanuage = s.toString();
-              print('.................');
-              print(_fromLanuage);
-              print('.................');
             });
           },
           value: _fromLanuage,
@@ -292,9 +290,6 @@ class _MyHomeStateState extends State<MyHomePage> {
           onChanged: (s) {
             setState(() {
               _toLanuage = s.toString();
-              print('.................');
-              print(_toLanuage);
-              print('.................');
             });
           },
           value: _toLanuage,
