@@ -1,9 +1,6 @@
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
-
-import 'demo.dart';
-
 void main() {
   runApp(new MyApp());
 }
@@ -15,9 +12,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: new MyHomePage(),
-      routes: <String, WidgetBuilder>{
-        '/Demo': (BuildContext context) => new Demo(),
-      },
+
     );
   }
 }
@@ -154,6 +149,14 @@ class _MyHomeStateState extends State<MyHomePage> {
                   ),
                 ),
                 Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: _from(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: _to(),
+                ),
+                Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: RaisedButton(
                     color: Colors.purple,
@@ -195,5 +198,46 @@ class _MyHomeStateState extends State<MyHomePage> {
           ),
         );
     }
+  }
+  Widget _from() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("From :"),
+        ),
+      ],
+    );
+  }
+
+  Widget _to() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("To :"),
+        ),
+        DropdownButton(
+          items: [
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+          ],
+          onChanged: null,
+          hint: Text("Select Language"),
+        )
+      ],
+    );
   }
 }
