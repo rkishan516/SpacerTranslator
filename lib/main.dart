@@ -1,7 +1,8 @@
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
-import 'package:location/location.dart';
+
+import 'demo.dart';
 
 void main() {
   runApp(new MyApp());
@@ -14,7 +15,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: new MyHomePage(),
-
+      routes: <String, WidgetBuilder>{
+        '/Demo': (BuildContext context) => new Demo(),
+      },
     );
   }
 }
@@ -25,8 +28,6 @@ int position = 0;
 int currentPage = 0;
 String _ans1 = "aaa";
 String _ans2 = "aaa";
-var curLoc = LocationData;
-var location = Location();
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -34,14 +35,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomeStateState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    location.onLocationChanged().listen((LocationData currentLocation) {
-      print(currentLocation.latitude);
-      print(currentLocation.longitude);
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -161,14 +154,6 @@ class _MyHomeStateState extends State<MyHomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: _from(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: _to(),
-                ),
-                Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: RaisedButton(
                     color: Colors.purple,
@@ -210,46 +195,5 @@ class _MyHomeStateState extends State<MyHomePage> {
           ),
         );
     }
-  }
-  Widget _from() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text("From :"),
-        ),
-      ],
-    );
-  }
-
-  Widget _to() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text("To :"),
-        ),
-        DropdownButton(
-          items: [
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-            DropdownMenuItem(
-              child: Text("English"),
-            ),
-          ],
-          onChanged: null,
-          hint: Text("Select Language"),
-        )
-      ],
-    );
   }
 }
