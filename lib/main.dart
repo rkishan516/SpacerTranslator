@@ -1,6 +1,8 @@
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
+import 'package:location/location.dart';
+
 void main() {
   runApp(new MyApp());
 }
@@ -23,6 +25,8 @@ int position = 0;
 int currentPage = 0;
 String _ans1 = "aaa";
 String _ans2 = "aaa";
+var curLoc = LocationData;
+var location = Location();
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -30,6 +34,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomeStateState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    location.onLocationChanged().listen((LocationData currentLocation) {
+      print(currentLocation.latitude);
+      print(currentLocation.longitude);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
