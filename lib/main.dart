@@ -1,7 +1,7 @@
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:translator/translator.dart';
-import 'package:tts/tts.dart';
 
 void main() {
   runApp(new MyApp());
@@ -28,17 +28,20 @@ enum TtsState { playing, stopped }
 class _MyHomeStateState extends State<MyHomePage> {
   String _toLanuage;
   String _fromLanuage;
+  String _homeLanuage;
   Map _map = {
-    'Hindi': 'hi',
-    'Danish': 'da',
-    'Dutch': 'nl',
     'English': 'en',
-    'Finnish': 'fi',
+    'Hindi': 'hi',
     'French': 'fr',
+    'Japanese': 'ja',
     'German': 'de',
     'Italian': 'it',
-    'Japanese': 'ja',
-    'Korean': 'ko'
+    'Danish': 'da',
+    'Dutch': 'nl',
+    'Finnish': 'fi',
+    'Nepali': 'ne',
+    'Indonesian': 'id',
+    'Portuguese': 'pt',
   };
   TextEditingController _txt1 = TextEditingController();
   TextEditingController _txt2 = TextEditingController();
@@ -46,7 +49,10 @@ class _MyHomeStateState extends State<MyHomePage> {
   int currentPage = 0;
   String _ans1 = "";
   String _ans2 = "";
+  dynamic languages;
   List<DropdownMenuItem> _list = List<DropdownMenuItem>();
+  FlutterTts flutterTts = new FlutterTts();
+  TtsState ttsState = TtsState.stopped;
 
   @override
   void initState() {
@@ -88,11 +94,16 @@ class _MyHomeStateState extends State<MyHomePage> {
         ),
         floatingActionButton: IconButton(
             icon: Icon(Icons.volume_up),
-            onPressed: () {
-              setState(() {
-                Tts.setLanguage('en');
-                Tts.speak('Hello World');
-              });
+            onPressed: () async {
+              if (currentPage == 0) {
+                flutterTts.setLanguage(_homeLanuage);
+                var result = await flutterTts.speak(_ans1);
+                if (result == 1) setState(() => ttsState = TtsState.playing);
+              } else {
+                flutterTts.setLanguage(_toLanuage);
+                var result = await flutterTts.speak(_ans2);
+                if (result == 1) setState(() => ttsState = TtsState.playing);
+              }
             }),
         body: ListView(
           children: <Widget>[
@@ -110,7 +121,8 @@ class _MyHomeStateState extends State<MyHomePage> {
 
   _getPage(int page) {
     Locale myLocale = Localizations.localeOf(context);
-    String _homeLanuage = myLocale.toString().substring(0, 2);
+    _homeLanuage = myLocale.toString().substring(0, 2);
+    _homeLanuage = 'hi';
     final translator = GoogleTranslator();
     switch (page) {
       case 0:
@@ -137,7 +149,7 @@ class _MyHomeStateState extends State<MyHomePage> {
                     color: Colors.purple,
                     onPressed: () {
                       setState(() {
-                        if (_txt1.text != null) {
+                        if (_txt1.text != "") {
                           translator
                               .translate(_txt1.text, to: _homeLanuage)
                               .then((s) => _ans1 = s);
@@ -157,23 +169,25 @@ class _MyHomeStateState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      elevation: 8,
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                (_ans1 == "")
+                    ? Container()
+                    : SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Card(
+                            elevation: 8,
+                            shape: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(_ans1),
+                            ),
+                          ),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(_ans1),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -210,7 +224,7 @@ class _MyHomeStateState extends State<MyHomePage> {
                     color: Colors.purple,
                     onPressed: () {
                       setState(() {
-                        if (_txt2.text != null) {
+                        if (_txt2.text != "") {
                           translator
                               .translate(_txt2.text,
                                   from: _fromLanuage, to: _toLanuage)
@@ -231,23 +245,25 @@ class _MyHomeStateState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      elevation: 8,
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                (_ans2 == "")
+                    ? Container()
+                    : SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Card(
+                            elevation: 8,
+                            shape: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(_ans2),
+                            ),
+                          ),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(_ans2),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
