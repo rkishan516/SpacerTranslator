@@ -154,7 +154,7 @@ class _MyHomeStateState extends State<MyHomePage> {
                               .translate(_txt1.text, to: _homeLanuage)
                               .then((s) => _ans1 = s);
                         } else {
-                          _ans1 = 'Please enter a Some Text';
+                          _ans1 = 'Please enter Some Text';
                         }
                       });
                     },
