@@ -5,9 +5,9 @@ A project for Flutter International hackathon Hack19
 ### Feature
 
 <ul><li>Conversion of Text from any Language to Locale Language</li></ul>
-<img src="images/local.jpeg">
+<p align="center"><img src="images/local.jpeg" width=320></p>
 <ul><li>Conversion of Text to basket Language to basket Language</li></ul>
-<img src="images/basket.jpeg">
+<p align="center"><img src="images/basket.jpeg" width="240"></p>
 
 ## What is Spacer Translator
 
